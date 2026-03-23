@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.aitest.entity.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM role WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM role ORDER BY id
+    </select>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        SELECT * FROM role ORDER BY id LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="findByCode" resultMap="BaseResultMap">
+        SELECT * FROM role WHERE code = #{code}
+    </select>
+
+    <insert id="insert" parameterType="com.example.aitest.entity.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role (name, code, description, status)
+        VALUES (#{name}, #{code}, #{description}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.example.aitest.entity.Role">
+        UPDATE role
+        SET name = #{name}, code = #{code}, description = #{description}, status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM role WHERE id = #{id}
+    </delete>
+
+</mapper>

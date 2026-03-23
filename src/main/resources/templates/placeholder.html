@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>敬请期待 - 银行信贷管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .placeholder {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .placeholder h1 {
+            color: #1a3a5c;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .placeholder p {
+            color: #666;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo">银行信贷管理系统</div>
+        <div class="user-info">
+            <span>管理员</span>
+            <button class="logout-btn" onclick="logout()">退出</button>
+        </div>
+    </div>
+    <div class="layout-container">
+        <div class="left-menu">
+            <a href="/index" class="menu-item">📊 工作台</a>
+            <a href="/application" class="menu-item">📋 申请管理</a>
+            <a href="/approval" class="menu-item">✓ 审批管理</a>
+            <a href="/contract" class="menu-item">📄 合同管理</a>
+            <a href="/loan" class="menu-item">💰 放款管理</a>
+            <a href="/repayment" class="menu-item">🔄 还款管理</a>
+            <a href="/warning" class="menu-item">⚠️ 预警管理</a>
+            <a href="/postloan" class="menu-item">📈 贷后管理</a>
+            <a href="/user" class="menu-item">👥 用户管理</a>
+            <a href="/role" class="menu-item">👨‍💼 角色管理</a>
+            <a href="/workflow" class="menu-item">⚙️ 流程管理</a>
+            <a href="/report" class="menu-item">📊 报表管理</a>
+        </div>
+        <div class="main-content">
+            <div class="placeholder">
+                <h1>🚧 功能开发中</h1>
+                <p>该模块正在紧张开发中，敬请期待！</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => window.location.href = '/login');
+        }
+    </script>
+</body>
+</html>

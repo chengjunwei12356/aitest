@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.CaptchaMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.aitest.entity.Captcha">
+        <id column="id" property="id"/>
+        <result column="session_id" property="sessionId"/>
+        <result column="code" property="code"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="used" property="used"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.example.aitest.entity.Captcha" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO captcha (session_id, code, expire_time, used)
+        VALUES (#{sessionId}, #{code}, #{expireTime}, #{used})
+    </insert>
+
+    <select id="findValidBySessionId" resultMap="BaseResultMap">
+        SELECT id, session_id, code, expire_time, used, created_at
+        FROM captcha
+        WHERE session_id = #{sessionId}
+          AND expire_time > #{now}
+          AND used = 0
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <update id="markAsUsed">
+        UPDATE captcha
+        SET used = 1
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteExpired">
+        DELETE FROM captcha
+        WHERE expire_time &lt; #{now}
+    </delete>
+
+</mapper>

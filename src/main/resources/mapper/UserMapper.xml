@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.aitest.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT id, username, password, email, phone, status, created_at, updated_at
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT id, username, password, email, phone, status, created_at, updated_at
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT id, username, password, email, phone, status, created_at, updated_at
+        FROM user
+        ORDER BY id
+    </select>
+
+    <update id="updatePassword">
+        UPDATE user SET password = #{password}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE user SET status = #{status}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="com.example.aitest.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (username, password, email, phone, status)
+        VALUES (#{username}, #{password}, #{email}, #{phone}, #{status})
+    </insert>
+
+</mapper>

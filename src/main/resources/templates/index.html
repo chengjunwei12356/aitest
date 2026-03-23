@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作台 - 银行信贷管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <div class="logo">银行信贷管理系统</div>
+        <div class="user-info">
+            <span id="username">管理员</span>
+            <button class="logout-btn" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <!-- 布局容器 -->
+    <div class="layout-container">
+        <!-- 左侧菜单 -->
+        <div class="left-menu">
+            <a href="/index" class="menu-item active">📊 工作台</a>
+            <a href="/application" class="menu-item">📋 申请管理</a>
+            <a href="/approval" class="menu-item">✓ 审批管理</a>
+            <a href="/contract" class="menu-item">📄 合同管理</a>
+            <a href="/loan" class="menu-item">💰 放款管理</a>
+            <a href="/repayment" class="menu-item">🔄 还款管理</a>
+            <a href="/warning" class="menu-item">⚠️ 预警管理</a>
+            <a href="/postloan" class="menu-item">📈 贷后管理</a>
+            <a href="/user" class="menu-item">👥 用户管理</a>
+            <a href="/role" class="menu-item">👨‍💼 角色管理</a>
+            <a href="/workflow" class="menu-item">⚙️ 流程管理</a>
+            <a href="/report" class="menu-item">📊 报表管理</a>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 工作台 -->
+            <div class="card">
+                <div class="card-title">待办任务</div>
+                <div class="todo-grid" id="todoGrid">
+                    <div class="todo-item">
+                        <div class="count" id="applicationCount">-</div>
+                        <div class="label">待审批申请</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="approvalCount">-</div>
+                        <div class="label">待审批</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="contractCount">-</div>
+                        <div class="label">待签署合同</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="loanCount">-</div>
+                        <div class="label">待放款</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="repaymentCount">-</div>
+                        <div class="label">待处理还款</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="warningCount">-</div>
+                        <div class="label">预警</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="postloanCount">-</div>
+                        <div class="label">贷后任务</div>
+                    </div>
+                    <div class="todo-item">
+                        <div class="count" id="otherCount">-</div>
+                        <div class="label">其他</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公告栏 -->
+            <div class="card">
+                <div class="card-title">公告栏</div>
+                <ul class="announcement-list" id="announcementList">
+                    <li>加载中...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        // 加载待办数据
+        fetch('/api/dashboard/todo')
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 200) {
+                    document.getElementById('applicationCount').textContent = data.data.application;
+                    document.getElementById('approvalCount').textContent = data.data.approval;
+                    document.getElementById('contractCount').textContent = data.data.contract;
+                    document.getElementById('loanCount').textContent = data.data.loan;
+                    document.getElementById('repaymentCount').textContent = data.data.repayment;
+                    document.getElementById('warningCount').textContent = data.data.warning;
+                    document.getElementById('postloanCount').textContent = data.data.postloan;
+                    document.getElementById('otherCount').textContent = data.data.other;
+                }
+            });
+
+        // 加载公告数据
+        fetch('/api/announcements?size=5')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('announcementList');
+                if (data.code === 200 && data.data && data.data.length > 0) {
+                    list.innerHTML = data.data.map(item =>
+                        `<li>
+                            <a href="#" class="title">${item.title}</a>
+                            <span class="date">${formatDate(item.createdAt)}</span>
+                        </li>`
+                    ).join('');
+                } else {
+                    list.innerHTML = '<li>暂无公告</li>';
+                }
+            });
+    </script>
+</body>
+</html>
