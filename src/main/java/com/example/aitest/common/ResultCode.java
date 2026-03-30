@@ -23,7 +23,17 @@ public enum ResultCode {
     CAPTCHA_ERROR(1003, "验证码错误"),
     CAPTCHA_EXPIRED(1004, "验证码已过期"),
     USER_NOT_FOUND(1005, "用户不存在"),
-    USERNAME_EXISTS(1006, "用户名已存在");
+    USERNAME_EXISTS(1006, "用户名已存在"),
+
+    // 申请管理业务错误码
+    APPLICATION_NOT_FOUND(3001, "申请不存在"),
+    APPLICATION_STATUS_INVALID(3002, "申请状态不允许此操作"),
+    APPLICATION_NO_PERMISSION(3003, "无权操作此申请"),
+    CUSTOMER_NOT_FOUND(3004, "客户不存在"),
+    DOCUMENT_TYPE_INVALID(3005, "材料类型不正确"),
+    DOCUMENT_REQUIRED(3006, "必传材料未上传"),
+    FILE_SIZE_EXCEEDED(3007, "文件大小超限"),
+    FILE_FORMAT_UNSUPPORTED(3008, "文件格式不支持");
 
     private final Integer code;
     private final String message;
