@@ -41,3 +41,15 @@ ON DUPLICATE KEY UPDATE `role_id` = VALUES(`role_id`);
 INSERT INTO `user_role` (`user_id`, `role_id`)
 SELECT 1, 1 FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM user_role WHERE user_id = 1 AND role_id = 1);
+
+-- 初始化客户数据
+INSERT INTO `customer` (`name`, `id_no`, `phone`, `email`) VALUES
+('张三', '110101199001011234', '13800138001', 'zhangsan@example.com'),
+('李四', '110101199002022345', '13800138002', 'lisi@example.com'),
+('王五', '110101199003033456', '13800138003', 'wangwu@example.com');
+
+-- 初始化贷款申请数据
+INSERT INTO `loan_application` (`application_no`, `customer_id`, `customer_name`, `customer_id_no`, `customer_phone`, `loan_amount`, `loan_term`, `loan_purpose`, `guarantee_type`, `status`, `current_stage`, `created_by`) VALUES
+('A202603300001', 1, '张三', '110101199001011234', '13800138001', 50000.00, 12, '消费装修', 'CREDIT', 'INITIAL', 'INITIAL', 1),
+('A202603300002', 2, '李四', '110101199002022345', '13800138002', 200000.00, 36, '企业经营', 'MORTGAGE', 'RISK', 'RISK', 1),
+('A202603300003', 3, '王五', '110101199003033456', '13800138003', 80000.00, 24, '购车', 'GUARANTEE', 'APPROVED', 'APPROVED', 1);

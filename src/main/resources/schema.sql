@@ -86,3 +86,72 @@ CREATE TABLE IF NOT EXISTS `announcement` (
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
+
+-- ===========================
+-- 申请管理模块表
+-- ===========================
+
+-- 客户信息表
+CREATE TABLE IF NOT EXISTS `customer` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL COMMENT '姓名',
+    `id_no` VARCHAR(18) NOT NULL UNIQUE COMMENT '身份证号',
+    `phone` VARCHAR(20) NOT NULL COMMENT '手机号',
+    `email` VARCHAR(100) DEFAULT NULL COMMENT '邮箱',
+    `address` VARCHAR(255) DEFAULT NULL COMMENT '地址',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_id_no` (`id_no`),
+    INDEX `idx_phone` (`phone`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户信息表';
+
+-- 贷款申请表
+CREATE TABLE IF NOT EXISTS `loan_application` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `application_no` VARCHAR(32) NOT NULL UNIQUE COMMENT '申请编号',
+    `customer_id` BIGINT DEFAULT NULL COMMENT '客户 ID',
+    `customer_name` VARCHAR(50) NOT NULL COMMENT '客户姓名',
+    `customer_id_no` VARCHAR(18) NOT NULL COMMENT '身份证号',
+    `customer_phone` VARCHAR(20) NOT NULL COMMENT '手机号',
+    `loan_amount` DECIMAL(15,2) NOT NULL COMMENT '申请金额',
+    `loan_term` INT NOT NULL COMMENT '贷款期限 (月)',
+    `loan_purpose` VARCHAR(100) DEFAULT NULL COMMENT '贷款用途',
+    `guarantee_type` VARCHAR(20) NOT NULL COMMENT '担保方式',
+    `current_stage` VARCHAR(20) DEFAULT 'DRAFT' COMMENT '当前阶段',
+    `status` VARCHAR(20) DEFAULT 'DRAFT' COMMENT '状态',
+    `assigned_to` BIGINT DEFAULT NULL COMMENT '当前处理人',
+    `created_by` BIGINT DEFAULT NULL COMMENT '创建人',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_customer` (`customer_id`),
+    INDEX `idx_status` (`status`),
+    INDEX `idx_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='贷款申请表';
+
+-- 申请材料表
+CREATE TABLE IF NOT EXISTS `application_document` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `application_id` BIGINT NOT NULL COMMENT '申请 ID',
+    `doc_type` VARCHAR(30) NOT NULL COMMENT '材料类型',
+    `doc_name` VARCHAR(100) NOT NULL COMMENT '文件名称',
+    `file_path` VARCHAR(255) NOT NULL COMMENT '存储路径',
+    `file_size` BIGINT DEFAULT NULL COMMENT '文件大小 (字节)',
+    `is_required` TINYINT DEFAULT 1 COMMENT '是否必传',
+    `uploaded_by` BIGINT DEFAULT NULL COMMENT '上传人',
+    `uploaded_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`application_id`) REFERENCES `loan_application`(`id`) ON DELETE CASCADE,
+    INDEX `idx_application` (`application_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='申请材料表';
+
+-- 审批记录表
+CREATE TABLE IF NOT EXISTS `approval_record` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `application_id` BIGINT NOT NULL COMMENT '申请 ID',
+    `stage` VARCHAR(20) NOT NULL COMMENT '审批阶段',
+    `approver_id` BIGINT NOT NULL COMMENT '审批人 ID',
+    `action` VARCHAR(20) NOT NULL COMMENT '操作',
+    `comment` TEXT DEFAULT NULL COMMENT '审批意见',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`application_id`) REFERENCES `loan_application`(`id`) ON DELETE CASCADE,
+    INDEX `idx_application` (`application_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='审批记录表';
