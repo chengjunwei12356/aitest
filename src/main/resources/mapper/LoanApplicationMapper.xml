@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.LoanApplicationMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.aitest.entity.LoanApplication">
+        <id column="id" property="id"/>
+        <result column="application_no" property="applicationNo"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="customer_id_no" property="customerIdNo"/>
+        <result column="customer_phone" property="customerPhone"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="loan_term" property="loanTerm"/>
+        <result column="loan_purpose" property="loanPurpose"/>
+        <result column="guarantee_type" property="guaranteeType"/>
+        <result column="current_stage" property="currentStage"/>
+        <result column="status" property="status"/>
+        <result column="assigned_to" property="assignedTo"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM loan_application WHERE id = #{id}
+    </select>
+
+    <select id="findByApplicationNo" resultMap="BaseResultMap">
+        SELECT * FROM loan_application WHERE application_no = #{applicationNo}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM loan_application
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="guaranteeType != null and guaranteeType != ''">
+                AND guarantee_type = #{guaranteeType}
+            </if>
+            <if test="minAmount != null and minAmount != ''">
+                AND loan_amount &gt;= #{minAmount}
+            </if>
+            <if test="maxAmount != null and maxAmount != ''">
+                AND loan_amount &lt;= #{maxAmount}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (customer_name LIKE CONCAT('%', #{keyword}, '%')
+                OR customer_phone LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND DATE(created_at) &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND DATE(created_at) &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
+    <insert id="insert" parameterType="com.example.aitest.entity.LoanApplication" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO loan_application (
+            application_no, customer_id, customer_name, customer_id_no, customer_phone,
+            loan_amount, loan_term, loan_purpose, guarantee_type,
+            current_stage, status, assigned_to, created_by
+        ) VALUES (
+            #{applicationNo}, #{customerId}, #{customerName}, #{customerIdNo}, #{customerPhone},
+            #{loanAmount}, #{loanTerm}, #{loanPurpose}, #{guaranteeType},
+            #{currentStage}, #{status}, #{assignedTo}, #{createdBy}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.example.aitest.entity.LoanApplication">
+        UPDATE loan_application
+        <set>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="customerIdNo != null">customer_id_no = #{customerIdNo},</if>
+            <if test="customerPhone != null">customer_phone = #{customerPhone},</if>
+            <if test="loanAmount != null">loan_amount = #{loanAmount},</if>
+            <if test="loanTerm != null">loan_term = #{loanTerm},</if>
+            <if test="loanPurpose != null">loan_purpose = #{loanPurpose},</if>
+            <if test="guaranteeType != null">guarantee_type = #{guaranteeType},</if>
+            <if test="currentStage != null">current_stage = #{currentStage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="assignedTo != null">assigned_to = #{assignedTo},</if>
+        </set>
+        updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM loan_application WHERE id = #{id}
+    </delete>
+
+    <update id="updateStatus">
+        UPDATE loan_application SET status = #{status}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCurrentStage">
+        UPDATE loan_application SET current_stage = #{stage}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>
