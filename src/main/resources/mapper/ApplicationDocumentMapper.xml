@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.ApplicationDocumentMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.aitest.entity.ApplicationDocument">
+        <id column="id" property="id"/>
+        <result column="application_id" property="applicationId"/>
+        <result column="doc_type" property="docType"/>
+        <result column="doc_name" property="docName"/>
+        <result column="file_path" property="filePath"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="is_required" property="isRequired"/>
+        <result column="uploaded_by" property="uploadedBy"/>
+        <result column="uploaded_at" property="uploadedAt"/>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM application_document WHERE id = #{id}
+    </select>
+
+    <select id="findByApplicationId" resultMap="BaseResultMap">
+        SELECT * FROM application_document WHERE application_id = #{applicationId}
+        ORDER BY is_required DESC, uploaded_at DESC
+    </select>
+
+    <insert id="insert" parameterType="com.example.aitest.entity.ApplicationDocument" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO application_document (
+            application_id, doc_type, doc_name, file_path, file_size, is_required, uploaded_by
+        ) VALUES (
+            #{applicationId}, #{docType}, #{docName}, #{filePath}, #{fileSize}, #{isRequired}, #{uploadedBy}
+        )
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM application_document WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByApplicationId">
+        DELETE FROM application_document WHERE application_id = #{applicationId}
+    </delete>
+
+</mapper>
