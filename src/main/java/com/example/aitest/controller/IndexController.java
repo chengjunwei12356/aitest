@@ -104,4 +104,12 @@ public class IndexController {
     public String report() {
         return "placeholder";
     }
+
+    /**
+     * 公告详情
+     */
+    @GetMapping("/announcement/{id}")
+    public String announcementDetail() {
+        return "announcement-detail";
+    }
 }

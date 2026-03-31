@@ -36,6 +36,15 @@
 
         <!-- 主内容区 -->
         <div class="main-content">
+            <!-- 数据加载提示 -->
+            <div id="loadingToast" class="loading-toast" style="display: none;">
+                <span class="loading-spinner">⏳</span> 数据加载中...
+            </div>
+            <div id="errorToast" class="error-toast" style="display: none;">
+                <span class="error-icon">⚠️</span> <span id="errorMessage">数据加载失败</span>
+                <button class="retry-btn" onclick="retryLoad()">重试</button>
+            </div>
+
             <!-- 工作台 -->
             <div class="card">
                 <div class="card-title">待办任务</div>
@@ -86,39 +95,180 @@
     </div>
 
     <script th:src="@{/js/common.js}"></script>
+    <style>
+        /* 加载提示样式 */
+        .loading-toast, .error-toast {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 4px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .loading-toast {
+            background: #e6f7ff;
+            border: 1px solid #1890ff;
+            color: #1890ff;
+        }
+        .error-toast {
+            background: #fff2f0;
+            border: 1px solid #ff4d4f;
+            color: #ff4d4f;
+        }
+        .retry-btn {
+            background: #ff4d4f;
+            color: #fff;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .retry-btn:hover {
+            background: #ff7875;
+        }
+    </style>
     <script>
-        // 加载待办数据
-        fetch('/api/dashboard/todo')
-            .then(res => res.json())
-            .then(data => {
-                if (data.code === 200) {
-                    document.getElementById('applicationCount').textContent = data.data.application;
-                    document.getElementById('approvalCount').textContent = data.data.approval;
-                    document.getElementById('contractCount').textContent = data.data.contract;
-                    document.getElementById('loanCount').textContent = data.data.loan;
-                    document.getElementById('repaymentCount').textContent = data.data.repayment;
-                    document.getElementById('warningCount').textContent = data.data.warning;
-                    document.getElementById('postloanCount').textContent = data.data.postloan;
-                    document.getElementById('otherCount').textContent = data.data.other;
+        // 重试计数器和标志
+        let retryCount = 0;
+        const MAX_RETRIES = 3;
+        let isLoading = false;
+
+        // 显示/隐藏提示
+        function showToast(type, message) {
+            const loadingToast = document.getElementById('loadingToast');
+            const errorToast = document.getElementById('errorToast');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (type === 'loading') {
+                loadingToast.style.display = 'flex';
+                errorToast.style.display = 'none';
+            } else if (type === 'error') {
+                loadingToast.style.display = 'none';
+                errorMessage.textContent = message;
+                errorToast.style.display = 'flex';
+            } else if (type === 'success') {
+                loadingToast.style.display = 'none';
+                errorToast.style.display = 'none';
+            }
+        }
+
+        // 重试加载
+        function retryLoad() {
+            retryCount = 0;
+            loadTodoData();
+            loadAnnouncements();
+        }
+
+        // 带重试的 fetch 函数
+        async function fetchWithRetry(url, maxRetries = 3) {
+            let lastError;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    lastError = error;
+                    if (i < maxRetries - 1) {
+                        // 指数退避：1 秒、2 秒、4 秒
+                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                    }
                 }
-            });
+            }
+            throw lastError;
+        }
+
+        // 加载待办数据
+        function loadTodoData() {
+            if (isLoading) return;
+            isLoading = true;
+            showToast('loading');
+
+            fetchWithRetry('/api/dashboard/todo', MAX_RETRIES)
+                .then(data => {
+                    isLoading = false;
+                    if (data.code === 200) {
+                        document.getElementById('applicationCount').textContent = data.data.application || 0;
+                        document.getElementById('approvalCount').textContent = data.data.approval || 0;
+                        document.getElementById('contractCount').textContent = data.data.contract || 0;
+                        document.getElementById('loanCount').textContent = data.data.loan || 0;
+                        document.getElementById('repaymentCount').textContent = data.data.repayment || 0;
+                        document.getElementById('warningCount').textContent = data.data.warning || 0;
+                        document.getElementById('postloanCount').textContent = data.data.postloan || 0;
+                        document.getElementById('otherCount').textContent = data.data.other || 0;
+                        showToast('success');
+                    } else {
+                        showToast('error', '待办数据加载失败');
+                    }
+                })
+                .catch(err => {
+                    isLoading = false;
+                    console.error('加载待办数据失败:', err);
+                    showToast('error', '待办数据加载失败，请检查网络连接');
+                });
+        }
 
         // 加载公告数据
-        fetch('/api/announcements?size=5')
-            .then(res => res.json())
-            .then(data => {
-                const list = document.getElementById('announcementList');
-                if (data.code === 200 && data.data && data.data.length > 0) {
-                    list.innerHTML = data.data.map(item =>
-                        `<li>
-                            <a href="#" class="title">${item.title}</a>
-                            <span class="date">${formatDate(item.createdAt)}</span>
-                        </li>`
-                    ).join('');
-                } else {
-                    list.innerHTML = '<li>暂无公告</li>';
-                }
-            });
-    </script>
+        function loadAnnouncements() {
+            fetchWithRetry('/api/announcements?size=5', MAX_RETRIES)
+                .then(data => {
+                    const list = document.getElementById('announcementList');
+                    if (data.code === 200 && data.data && data.data.length > 0) {
+                        list.innerHTML = data.data.map(item =>
+                            `<li>
+                                <a href="/announcement/${item.id}" class="title">${item.title}</a>
+                                <span class="date">${formatDate(item.createdAt)}</span>
+                            </li>`
+                        ).join('');
+                    } else {
+                        list.innerHTML = '<li>暂无公告</li>';
+                    }
+                })
+                .catch(err => {
+                    console.error('加载公告数据失败:', err);
+                    document.getElementById('announcementList').innerHTML = '<li style="color: #ff4d4f;">公告加载失败，请刷新重试</li>';
+                });
+        }
+
+        // 格式化日期（覆盖 common.js 中的版本，支持更多格式）
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            // 支持多种日期格式
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return dateStr;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 退出登录（覆盖 common.js 中的版本，增加错误处理）
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/login';
+                })
+                .catch(err => {
+                    console.error('退出登录失败:', err);
+                    window.location.href = '/login';
+                });
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTodoData();
+            loadAnnouncements();
+
+            // 每 30 秒自动刷新待办任务数据（FR-009）
+            setInterval(loadTodoData, 30000);
+        });
 </body>
 </html>

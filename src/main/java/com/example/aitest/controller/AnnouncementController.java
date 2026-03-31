@@ -20,13 +20,13 @@ public class AnnouncementController {
     private final AnnouncementService announcementService;
 
     /**
-     * 获取公告列表（分页）
+     * 获取公告列表（首页使用）
      */
     @GetMapping
     public Result<List<Announcement>> list(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        List<Announcement> list = announcementService.findByPage(page, size);
+            @RequestParam(defaultValue = "5") int size) {
+        List<Announcement> list = announcementService.findPublished(size);
         return Result.success(list);
     }
 
