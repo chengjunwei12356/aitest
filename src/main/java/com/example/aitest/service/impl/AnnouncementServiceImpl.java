@@ -1,5 +1,7 @@
 package com.example.aitest.service.impl;
 
+import com.example.aitest.config.BusinessException;
+import com.example.aitest.common.ResultCode;
 import com.example.aitest.entity.Announcement;
 import com.example.aitest.mapper.AnnouncementMapper;
 import com.example.aitest.service.AnnouncementService;
@@ -63,7 +65,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Announcement update(Long id, String title, String content, Integer publishStatus) {
         Announcement existing = announcementMapper.findById(id);
         if (existing == null) {
-            throw new RuntimeException("公告不存在");
+            throw new BusinessException(ResultCode.ANNOUNCEMENT_NOT_FOUND);
         }
         Announcement announcement = Announcement.builder()
                 .id(id)
@@ -79,6 +81,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public void delete(Long id) {
+        Announcement existing = announcementMapper.findById(id);
+        if (existing == null) {
+            throw new BusinessException(ResultCode.ANNOUNCEMENT_NOT_FOUND);
+        }
         announcementMapper.delete(id);
         log.info("删除公告成功：{}", id);
     }
@@ -86,6 +92,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public void publish(Long id) {
+        Announcement existing = announcementMapper.findById(id);
+        if (existing == null) {
+            throw new BusinessException(ResultCode.ANNOUNCEMENT_NOT_FOUND);
+        }
         announcementMapper.updatePublishStatus(id, 1, LocalDateTime.now());
         log.info("发布公告成功：{}", id);
     }
@@ -93,6 +103,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public void unpublish(Long id) {
+        Announcement existing = announcementMapper.findById(id);
+        if (existing == null) {
+            throw new BusinessException(ResultCode.ANNOUNCEMENT_NOT_FOUND);
+        }
         announcementMapper.updatePublishStatus(id, 2, null);
         log.info("下架公告成功：{}", id);
     }

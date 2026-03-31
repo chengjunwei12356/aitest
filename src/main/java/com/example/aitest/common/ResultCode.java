@@ -33,7 +33,10 @@ public enum ResultCode {
     DOCUMENT_TYPE_INVALID(3005, "材料类型不正确"),
     DOCUMENT_REQUIRED(3006, "必传材料未上传"),
     FILE_SIZE_EXCEEDED(3007, "文件大小超限"),
-    FILE_FORMAT_UNSUPPORTED(3008, "文件格式不支持");
+    FILE_FORMAT_UNSUPPORTED(3008, "文件格式不支持"),
+
+    // 公告管理业务错误码
+    ANNOUNCEMENT_NOT_FOUND(4001, "公告不存在");
 
     private final Integer code;
     private final String message;
