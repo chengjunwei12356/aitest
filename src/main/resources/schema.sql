@@ -155,3 +155,42 @@ CREATE TABLE IF NOT EXISTS `approval_record` (
     FOREIGN KEY (`application_id`) REFERENCES `loan_application`(`id`) ON DELETE CASCADE,
     INDEX `idx_application` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='审批记录表';
+
+-- ===========================
+-- 客户经理助手模块表
+-- ===========================
+
+-- 客户提醒表
+CREATE TABLE IF NOT EXISTS `customer_reminder` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `user_id` BIGINT NOT NULL COMMENT '客户经理用户 ID',
+    `customer_id` BIGINT NOT NULL COMMENT '客户 ID',
+    `reminder_type` VARCHAR(50) NOT NULL COMMENT '提醒类型（枚举）',
+    `title` VARCHAR(200) NOT NULL COMMENT '提醒标题',
+    `content` TEXT COMMENT '提醒内容',
+    `priority` TINYINT DEFAULT 1 COMMENT '优先级：1-低, 2-中, 3-高',
+    `status` VARCHAR(20) DEFAULT 'PENDING' COMMENT '状态：PENDING-待处理, NOTIFIED-已通知, RESOLVED-已解决',
+    `resolution_note` TEXT COMMENT '解决备注',
+    `due_date` DATETIME NOT NULL COMMENT '截止时间',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_user_id` (`user_id`),
+    INDEX `idx_customer_id` (`customer_id`),
+    INDEX `idx_status` (`status`),
+    INDEX `idx_due_date` (`due_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户提醒表';
+
+-- 知识库文章表
+CREATE TABLE IF NOT EXISTS `knowledge_article` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `category` VARCHAR(50) NOT NULL COMMENT '分类（枚举）',
+    `title` VARCHAR(200) NOT NULL COMMENT '标题',
+    `content` TEXT COMMENT '内容',
+    `tags` VARCHAR(500) COMMENT '标签（逗号分隔）',
+    `view_count` INT DEFAULT 0 COMMENT '浏览次数',
+    `is_active` TINYINT DEFAULT 1 COMMENT '是否激活：1-是, 0-否',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_category` (`category`),
+    INDEX `idx_is_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识库文章表';

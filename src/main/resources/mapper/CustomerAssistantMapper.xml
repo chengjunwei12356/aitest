@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.CustomerAssistantMapper">
+
+    <!-- CustomerReminderDTO ResultMap -->
+    <resultMap id="CustomerReminderDTOResult" type="com.example.aitest.dto.CustomerReminderDTO">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="reminderType" column="reminder_type"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- KnowledgeArticleDTO ResultMap -->
+    <resultMap id="KnowledgeArticleDTOResult" type="com.example.aitest.dto.KnowledgeArticleDTO">
+        <id property="id" column="id"/>
+        <result property="category" column="category"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="tags" column="tags"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- getReminders: 获取提醒列表，支持按类型、状态和数据权限过滤 -->
+    <select id="getReminders" resultMap="CustomerReminderDTOResult">
+        SELECT id, user_id, customer_id, reminder_type, title, content, priority, status, due_date, created_at, updated_at
+        FROM customer_reminder
+        <where>
+            <if test="type != null and type != ''">
+                AND reminder_type = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY due_date ASC
+    </select>
+
+    <!-- getCustomerReminders: 获取指定客户的所有提醒，支持数据权限过滤 -->
+    <select id="getCustomerReminders" resultMap="CustomerReminderDTOResult">
+        SELECT id, user_id, customer_id, reminder_type, title, content, priority, status, due_date, created_at, updated_at
+        FROM customer_reminder
+        <where>
+            customer_id = #{customerId}
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY due_date ASC
+    </select>
+
+    <!-- searchKnowledge: 搜索知识库文章，支持分类和关键词 -->
+    <select id="searchKnowledge" resultMap="KnowledgeArticleDTOResult">
+        SELECT id, category, title, content, tags, view_count, is_active, created_at, updated_at
+        FROM knowledge_article
+        <where>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            AND is_active = 1
+        </where>
+        ORDER BY view_count DESC
+    </select>
+
+    <!-- getKnowledgeArticle: 获取知识库文章详情 -->
+    <select id="getKnowledgeArticle" resultMap="KnowledgeArticleDTOResult">
+        SELECT id, category, title, content, tags, view_count, is_active, created_at, updated_at
+        FROM knowledge_article
+        WHERE id = #{id} AND is_active = 1
+    </select>
+
+    <!-- updateViewCount: 增加浏览次数 -->
+    <update id="updateViewCount">
+        UPDATE knowledge_article
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- resolveReminder: 标记提醒为已解决，支持数据权限检查 -->
+    <update id="resolveReminder">
+        UPDATE customer_reminder
+        SET status = 'RESOLVED', updated_at = NOW()
+        <if test="note != null and note != ''">
+            , resolution_note = #{note}
+        </if>
+        WHERE id = #{reminderId}
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+    </update>
+
+</mapper>
