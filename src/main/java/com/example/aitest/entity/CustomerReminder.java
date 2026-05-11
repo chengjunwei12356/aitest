@@ -14,6 +14,11 @@ public class CustomerReminder {
     private Long id;
 
     /**
+     * 客户经理用户 ID
+     */
+    private Long userId;
+
+    /**
      * 客户 ID
      */
     private Long customerId;

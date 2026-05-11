@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aitest.mapper.NotificationMapper">
+
+    <!-- Notification ResultMap -->
+    <resultMap id="NotificationResult" type="com.example.aitest.entity.Notification">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="relatedId" column="related_id"/>
+        <result property="isRead" column="is_read"/>
+        <result property="priority" column="priority"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="readAt" column="read_at"/>
+    </resultMap>
+
+    <!-- findByUserId: 获取用户的消息列表 -->
+    <select id="findByUserId" resultMap="NotificationResult">
+        SELECT id, user_id, title, content, type, related_id, is_read, priority, created_at, read_at
+        FROM notification
+        WHERE user_id = #{userId}
+        <if test="isRead != null">
+            AND is_read = #{isRead}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- countUnread: 获取未读消息数量 -->
+    <select id="countUnread" resultType="int">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE user_id = #{userId} AND is_read = 0
+    </select>
+
+    <!-- insert: 插入消息 -->
+    <insert id="insert" parameterType="com.example.aitest.entity.Notification" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notification (user_id, title, content, type, related_id, is_read, priority)
+        VALUES (#{userId}, #{title}, #{content}, #{type}, #{relatedId}, #{isRead}, #{priority})
+    </insert>
+
+    <!-- markAsRead: 标记为已读 -->
+    <update id="markAsRead">
+        UPDATE notification
+        SET is_read = 1, read_at = NOW()
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <!-- markAllAsRead: 批量标记为已读 -->
+    <update id="markAllAsRead">
+        UPDATE notification
+        SET is_read = 1, read_at = NOW()
+        WHERE user_id = #{userId} AND is_read = 0
+    </update>
+
+    <!-- deleteById: 删除消息 -->
+    <delete id="deleteById">
+        DELETE FROM notification
+        WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+</mapper>

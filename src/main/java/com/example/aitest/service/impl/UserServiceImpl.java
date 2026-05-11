@@ -8,6 +8,7 @@ import com.example.aitest.entity.User;
 import com.example.aitest.mapper.UserMapper;
 import com.example.aitest.mapper.UserRoleMapper;
 import com.example.aitest.service.CaptchaService;
+import com.example.aitest.service.LoginAttemptService;
 import com.example.aitest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRoleMapper userRoleMapper;
     private final CaptchaService captchaService;
+    private final LoginAttemptService loginAttemptService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -42,20 +45,32 @@ public class UserServiceImpl implements UserService {
         // 2. 查询用户
         User user = userMapper.findByUsername(request.getUsername());
         if (user == null) {
-            throw new BusinessException(ResultCode.USER_NOT_FOUND);
+            throw new BusinessException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
         }
 
-        // 3. 检查用户状态
+        // 3. 检查账户是否被锁定
+        if (loginAttemptService.isAccountLocked(user)) {
+            long remainingMinutes = loginAttemptService.getRemainingLockoutMinutes(user);
+            log.warn("账户已锁定: username={}, 剩余{}分钟", user.getUsername(), remainingMinutes);
+            throw new BusinessException(ResultCode.ACCOUNT_LOCKED);
+        }
+
+        // 4. 检查用户状态
         if (user.getStatus() == 0) {
             throw new BusinessException(ResultCode.USER_DISABLED);
         }
 
-        // 4. 验证密码
+        // 5. 验证密码
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            // 记录登录失败
+            loginAttemptService.recordLoginFailure(user);
             throw new BusinessException(ResultCode.USERNAME_OR_PASSWORD_ERROR);
         }
 
-        // 5. 生成 token（简单实现，实际项目应使用 JWT）
+        // 6. 登录成功 - 重置失败计数
+        loginAttemptService.recordLoginSuccess(user);
+
+        // 7. 生成 token（简单实现，实际项目应使用 JWT）
         String token = generateToken(user);
 
         log.info("用户登录成功，username: {}", user.getUsername());

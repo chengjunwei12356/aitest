@@ -54,4 +54,24 @@ public interface UserMapper {
      * @return 影响行数
      */
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    /**
+     * 更新登录失败次数和锁定时间
+     * @param id 用户 ID
+     * @param failedAttempts 失败次数
+     * @param lockedUntil 锁定截止时间
+     * @return 影响行数
+     */
+    int updateLoginAttempts(@Param("id") Long id, 
+                           @Param("failedAttempts") Integer failedAttempts,
+                           @Param("lockedUntil") java.time.LocalDateTime lockedUntil);
+
+    /**
+     * 更新最后登录时间
+     * @param id 用户 ID
+     * @param lastLoginAt 最后登录时间
+     * @return 影响行数
+     */
+    int updateLastLoginAt(@Param("id") Long id, 
+                         @Param("lastLoginAt") java.time.LocalDateTime lastLoginAt);
 }

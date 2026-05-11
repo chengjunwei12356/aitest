@@ -34,19 +34,19 @@ public class IndexController {
     }
 
     /**
-     * 申请管理（占位）
+     * 申请管理
      */
     @GetMapping("/application")
     public String application() {
-        return "placeholder";
+        return "application/index";
     }
 
     /**
-     * 审批管理（占位）
+     * 审批管理
      */
     @GetMapping("/approval")
     public String approval() {
-        return "placeholder";
+        return "approval/index";
     }
 
     /**
@@ -102,7 +102,15 @@ public class IndexController {
      */
     @GetMapping("/report")
     public String report() {
-        return "placeholder";
+        return "report/index";
+    }
+
+    /**
+     * 客户经理助手
+     */
+    @GetMapping("/customer-assistant")
+    public String customerAssistant() {
+        return "customer-assistant";
     }
 
     /**

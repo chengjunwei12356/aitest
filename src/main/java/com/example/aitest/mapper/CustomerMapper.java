@@ -36,4 +36,14 @@ public interface CustomerMapper {
      * 更新客户
      */
     int update(Customer customer);
+
+    /**
+     * 删除客户
+     */
+    int deleteById(@Param("id") Long id);
+
+    /**
+     * 统计所有客户数量
+     */
+    int countAll();
 }

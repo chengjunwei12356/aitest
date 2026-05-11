@@ -1,6 +1,7 @@
 package com.example.aitest.dto;
 
 import com.example.aitest.entity.ReminderType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -57,15 +58,33 @@ public class CustomerReminderDTO {
     /**
      * 截止时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime dueDate;
 
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updatedAt;
+
+    /**
+     * 客户姓名
+     */
+    private String customerName;
+
+    /**
+     * 客户手机号
+     */
+    private String customerPhone;
+
+    /**
+     * 解决备注
+     */
+    private String resolutionNote;
 }

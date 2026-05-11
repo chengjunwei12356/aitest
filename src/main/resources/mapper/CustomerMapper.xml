@@ -45,9 +45,17 @@
             <if test="phone != null">phone = #{phone},</if>
             <if test="email != null">email = #{email},</if>
             <if test="address != null">address = #{address},</if>
+            updated_at = NOW()
         </set>
-        updated_at = NOW()
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteById">
+        DELETE FROM customer WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM customer
+    </select>
 
 </mapper>

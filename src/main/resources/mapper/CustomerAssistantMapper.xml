@@ -16,6 +16,9 @@
         <result property="dueDate" column="due_date"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="customerPhone" column="customer_phone"/>
+        <result property="resolutionNote" column="resolution_note"/>
     </resultMap>
 
     <!-- KnowledgeArticleDTO ResultMap -->
@@ -33,33 +36,39 @@
 
     <!-- getReminders: 获取提醒列表，支持按类型、状态和数据权限过滤 -->
     <select id="getReminders" resultMap="CustomerReminderDTOResult">
-        SELECT id, user_id, customer_id, reminder_type, title, content, priority, status, due_date, created_at, updated_at
-        FROM customer_reminder
+        SELECT cr.id, cr.user_id, cr.customer_id, cr.reminder_type, cr.title, cr.content, 
+               cr.priority, cr.status, cr.due_date, cr.created_at, cr.updated_at, cr.resolution_note,
+               c.name as customer_name, c.phone as customer_phone
+        FROM customer_reminder cr
+        LEFT JOIN customer c ON cr.customer_id = c.id
         <where>
             <if test="type != null and type != ''">
-                AND reminder_type = #{type}
+                AND cr.reminder_type = #{type}
             </if>
             <if test="status != null and status != ''">
-                AND status = #{status}
+                AND cr.status = #{status}
             </if>
             <if test="userId != null">
-                AND user_id = #{userId}
+                AND cr.user_id = #{userId}
             </if>
         </where>
-        ORDER BY due_date ASC
+        ORDER BY cr.due_date ASC
     </select>
 
     <!-- getCustomerReminders: 获取指定客户的所有提醒，支持数据权限过滤 -->
     <select id="getCustomerReminders" resultMap="CustomerReminderDTOResult">
-        SELECT id, user_id, customer_id, reminder_type, title, content, priority, status, due_date, created_at, updated_at
-        FROM customer_reminder
+        SELECT cr.id, cr.user_id, cr.customer_id, cr.reminder_type, cr.title, cr.content, 
+               cr.priority, cr.status, cr.due_date, cr.created_at, cr.updated_at, cr.resolution_note,
+               c.name as customer_name, c.phone as customer_phone
+        FROM customer_reminder cr
+        LEFT JOIN customer c ON cr.customer_id = c.id
         <where>
-            customer_id = #{customerId}
+            cr.customer_id = #{customerId}
             <if test="userId != null">
-                AND user_id = #{userId}
+                AND cr.user_id = #{userId}
             </if>
         </where>
-        ORDER BY due_date ASC
+        ORDER BY cr.due_date ASC
     </select>
 
     <!-- searchKnowledge: 搜索知识库文章，支持分类和关键词 -->
@@ -104,5 +113,116 @@
             AND user_id = #{userId}
         </if>
     </update>
+
+    <!-- CustomerReminder ResultMap -->
+    <resultMap id="CustomerReminderResult" type="com.example.aitest.entity.CustomerReminder">
+        <id property="id" column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="reminderType" column="reminder_type"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- KnowledgeArticle ResultMap -->
+    <resultMap id="KnowledgeArticleResult" type="com.example.aitest.entity.KnowledgeArticle">
+        <id property="id" column="id"/>
+        <result property="category" column="category"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="tags" column="tags"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- getReminderById: 根据ID获取提醒 -->
+    <select id="getReminderById" resultMap="CustomerReminderDTOResult">
+        SELECT cr.id, cr.user_id, cr.customer_id, cr.reminder_type, cr.title, cr.content, 
+               cr.priority, cr.status, cr.due_date, cr.created_at, cr.updated_at, cr.resolution_note,
+               c.name as customer_name, c.phone as customer_phone
+        FROM customer_reminder cr
+        LEFT JOIN customer c ON cr.customer_id = c.id
+        WHERE cr.id = #{id}
+    </select>
+
+    <!-- createReminder: 创建提醒 -->
+    <insert id="createReminder" parameterType="com.example.aitest.entity.CustomerReminder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO customer_reminder (user_id, customer_id, reminder_type, title, content, priority, status, due_date)
+        VALUES (#{userId}, #{customerId}, #{reminderType, typeHandler=org.apache.ibatis.type.EnumTypeHandler}, #{title}, #{content}, #{priority}, #{status}, #{dueDate})
+    </insert>
+
+    <!-- updateReminder: 更新提醒 -->
+    <update id="updateReminder" parameterType="com.example.aitest.entity.CustomerReminder">
+        UPDATE customer_reminder
+        SET title = #{title},
+            content = #{content},
+            priority = #{priority},
+            due_date = #{dueDate},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- deleteReminder: 删除提醒 -->
+    <delete id="deleteReminder">
+        DELETE FROM customer_reminder
+        WHERE id = #{id}
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+    </delete>
+
+    <!-- getReminderStats: 获取提醒统计 -->
+    <select id="getReminderStats" resultType="java.util.Map">
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'NOTIFIED' THEN 1 ELSE 0 END) as notified,
+            SUM(CASE WHEN status = 'RESOLVED' THEN 1 ELSE 0 END) as resolved,
+            SUM(CASE WHEN priority >= 3 AND status = 'PENDING' THEN 1 ELSE 0 END) as highPriority
+        FROM customer_reminder
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <!-- createKnowledgeArticle: 创建知识库文章 -->
+    <insert id="createKnowledgeArticle" parameterType="com.example.aitest.entity.KnowledgeArticle" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO knowledge_article (category, title, content, tags, is_active)
+        VALUES (#{category, typeHandler=org.apache.ibatis.type.EnumTypeHandler}, #{title}, #{content}, #{tags}, #{isActive})
+    </insert>
+
+    <!-- updateKnowledgeArticle: 更新知识库文章 -->
+    <update id="updateKnowledgeArticle" parameterType="com.example.aitest.entity.KnowledgeArticle">
+        UPDATE knowledge_article
+        SET category = #{category, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            title = #{title},
+            content = #{content},
+            tags = #{tags},
+            is_active = #{isActive},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- deleteKnowledgeArticle: 删除知识库文章 -->
+    <delete id="deleteKnowledgeArticle">
+        DELETE FROM knowledge_article WHERE id = #{id}
+    </delete>
+
+    <!-- getHotArticles: 获取热门文章 -->
+    <select id="getHotArticles" resultMap="KnowledgeArticleDTOResult">
+        SELECT id, category, title, content, tags, view_count, is_active, created_at, updated_at
+        FROM knowledge_article
+        WHERE is_active = 1
+        ORDER BY view_count DESC
+        LIMIT #{limit}
+    </select>
 
 </mapper>

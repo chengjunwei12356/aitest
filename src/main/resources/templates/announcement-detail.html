@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告详情 - 银行信贷管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .announcement-detail {
+            background: #fff;
+            border-radius: 4px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .announcement-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        .announcement-meta {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .announcement-content {
+            line-height: 1.8;
+            color: #333;
+            font-size: 15px;
+            min-height: 200px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 10px 24px;
+            background: #1890ff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background: #40a9ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <div class="logo">银行信贷管理系统</div>
+        <div class="user-info">
+            <span id="username">管理员</span>
+            <button class="logout-btn" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <!-- 布局容器 -->
+    <div class="layout-container">
+        <!-- 左侧菜单 -->
+        <div class="left-menu">
+            <a href="/index" class="menu-item">📊 工作台</a>
+            <a href="/application" class="menu-item">📋 申请管理</a>
+            <a href="/approval" class="menu-item">✓ 审批管理</a>
+            <a href="/contract" class="menu-item">📄 合同管理</a>
+            <a href="/loan" class="menu-item">💰 放款管理</a>
+            <a href="/repayment" class="menu-item">🔄 还款管理</a>
+            <a href="/warning" class="menu-item">⚠️ 预警管理</a>
+            <a href="/postloan" class="menu-item">📈 贷后管理</a>
+            <a href="/user" class="menu-item">👥 用户管理</a>
+            <a href="/role" class="menu-item">👨‍💼 角色管理</a>
+            <a href="/workflow" class="menu-item">⚙️ 流程管理</a>
+            <a href="/report" class="menu-item">📊 报表管理</a>
+            <a href="/customer-assistant" class="menu-item">🤖 客户经理助手</a>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="announcement-detail">
+                <h1 class="announcement-title" id="announcementTitle">加载中...</h1>
+                <div class="announcement-meta">
+                    <span>发布时间：</span><span id="publishTime">-</span>
+                </div>
+                <div class="announcement-content" id="announcementContent">
+                    加载中...
+                </div>
+                <a href="/index" class="back-btn">← 返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        // 获取 URL 中的公告 ID
+        const pathParts = window.location.pathname.split('/');
+        const announcementId = pathParts[pathParts.length - 1];
+
+        // 加载公告详情
+        fetch(`/api/announcements/${announcementId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 200 && data.data) {
+                    document.getElementById('announcementTitle').textContent = data.data.title;
+                    document.getElementById('announcementContent').textContent = data.data.content || '无内容';
+                    document.getElementById('publishTime').textContent = formatDate(data.data.createdAt);
+                } else {
+                    document.getElementById('announcementTitle').textContent = '公告不存在';
+                    document.getElementById('announcementContent').textContent = '';
+                }
+            })
+            .catch(err => {
+                console.error('加载公告详情失败:', err);
+                document.getElementById('announcementTitle').textContent = '加载失败';
+                document.getElementById('announcementContent').textContent = '无法加载公告内容';
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审批管理 - 银行信贷管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .filter-bar input {
+            width: 150px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background: #1890ff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+        .btn-success {
+            background: #52c41a;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #73d13d;
+        }
+        .btn-danger {
+            background: #ff4d4f;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #ff7875;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            border: 1px solid #f0f0f0;
+            text-align: left;
+        }
+        .data-table th {
+            background: #fafafa;
+            font-weight: 600;
+        }
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .status-pending { background: #e6f7ff; color: #1890ff; }
+        .status-approved { background: #f6ffed; color: #52c41a; }
+        .status-rejected { background: #fff2f0; color: #ff4d4f; }
+        .action-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .action-approve { background: #f6ffed; color: #52c41a; }
+        .action-reject { background: #fff2f0; color: #ff4d4f; }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+        }
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-footer {
+            padding: 12px 24px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .form-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .form-item label {
+            width: 80px;
+            text-align: right;
+            line-height: 32px;
+        }
+        .form-item input, .form-item select, .form-item textarea {
+            flex: 1;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-item textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .record-timeline {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .record-item {
+            padding: 12px;
+            border-left: 2px solid #1890ff;
+            margin-left: 10px;
+            padding-left: 20px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .record-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 14px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #1890ff;
+        }
+        .record-item.approved::before {
+            background: #52c41a;
+        }
+        .record-item.rejected::before {
+            background: #ff4d4f;
+        }
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .record-stage {
+            font-weight: 600;
+            color: #333;
+        }
+        .record-time {
+            font-size: 12px;
+            color: #999;
+        }
+        .record-content {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo">银行信贷管理系统</div>
+        <div class="user-info">
+            <span id="username">管理员</span>
+            <button class="logout-btn" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <div class="left-menu">
+            <a href="/index" class="menu-item">📊 工作台</a>
+            <a href="/application" class="menu-item">📋 申请管理</a>
+            <a href="/approval" class="menu-item active">✓ 审批管理</a>
+            <a href="/contract" class="menu-item">📄 合同管理</a>
+            <a href="/loan" class="menu-item">💰 放款管理</a>
+            <a href="/repayment" class="menu-item">🔄 还款管理</a>
+            <a href="/warning" class="menu-item">⚠️ 预警管理</a>
+            <a href="/postloan" class="menu-item">📈 贷后管理</a>
+            <a href="/user" class="menu-item">👥 用户管理</a>
+            <a href="/role" class="menu-item">👨‍💼 角色管理</a>
+            <a href="/workflow" class="menu-item">⚙️ 流程管理</a>
+            <a href="/report" class="menu-item">📊 报表管理</a>
+            <a href="/customer-assistant" class="menu-item">🤖 客户经理助手</a>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <div class="card-title">审批管理</div>
+
+                <!-- 筛选栏 -->
+                <div class="filter-bar">
+                    <input type="text" id="keyword" placeholder="申请编号/客户姓名">
+                    <select id="status">
+                        <option value="">全部状态</option>
+                        <option value="pending">待审批</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已拒绝</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="loadData()">查询</button>
+                </div>
+
+                <!-- 数据表格 -->
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>申请编号</th>
+                            <th>客户姓名</th>
+                            <th>贷款金额</th>
+                            <th>贷款期限</th>
+                            <th>当前阶段</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="7" style="text-align:center;">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 审批弹窗 -->
+    <div class="modal-overlay" id="approvalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">审批申请</h3>
+                <button class="modal-close" onclick="closeApprovalModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="approvalApplicationId">
+                <div class="form-item">
+                    <label>申请编号</label>
+                    <span id="displayApplicationNo">-</span>
+                </div>
+                <div class="form-item">
+                    <label>客户姓名</label>
+                    <span id="displayCustomerName">-</span>
+                </div>
+                <div class="form-item">
+                    <label>贷款金额</label>
+                    <span id="displayLoanAmount">-</span>
+                </div>
+                <div class="form-item">
+                    <label>当前阶段</label>
+                    <span id="displayCurrentStage">-</span>
+                </div>
+                <div class="form-item">
+                    <label>审批记录</label>
+                    <div class="record-timeline" id="recordTimeline">
+                        <!-- 审批记录时间线 -->
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label>审批操作 *</label>
+                    <select id="approvalAction" required>
+                        <option value="">请选择</option>
+                        <option value="approve">同意</option>
+                        <option value="reject">拒绝</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label>审批意见</label>
+                    <textarea id="approvalComment" placeholder="请输入审批意见"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeApprovalModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitApproval()">提交审批</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        let applicationsData = [];
+
+        // 加载数据
+        function loadData() {
+            const keyword = document.getElementById('keyword').value;
+            const status = document.getElementById('status').value;
+
+            let url = '/api/applications';
+            const params = new URLSearchParams();
+            if (keyword) params.append('keyword', keyword);
+            if (status) params.append('status', status);
+
+            url += '?' + params.toString();
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        applicationsData = data.data;
+                        // 只显示待审批的申请
+                        const pendingApps = data.data.filter(app =>
+                            app.status === 'INITIAL' || app.status === 'PENDING' ||
+                            app.status === 'RISK' || app.status === 'APPROVED'
+                        );
+                        renderTable(pendingApps);
+                    } else {
+                        alert('加载失败：' + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('加载数据失败:', err);
+                    alert('加载失败，请重试');
+                });
+        }
+
+        // 渲染表格
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">暂无数据</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.applicationNo || '-'}</td>
+                    <td>${item.customerName || '-'}</td>
+                    <td>${item.loanAmount ? item.loanAmount + '万元' : '-'}</td>
+                    <td>${item.loanTerm || '-'}月</td>
+                    <td>${translateStage(item.currentStage)}</td>
+                    <td><span class="status-badge status-${translateStatusClass(item.status)}">${translateStatus(item.status)}</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="showApprovalDetail(${item.id})">审批</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 翻译状态
+        function translateStatus(status) {
+            const map = {
+                'INITIAL': '草稿',
+                'PENDING': '待审批',
+                'APPROVED': '已通过',
+                'REJECTED': '已拒绝',
+                'RISK': '风险控制',
+                'CONTRACT': '合同签署',
+                'LOAN': '放款中',
+                'REPAYING': '还款中',
+                'COMPLETED': '已完成'
+            };
+            return map[status] || status;
+        }
+
+        function translateStatusClass(status) {
+            if (status === 'APPROVED') return 'approved';
+            if (status === 'REJECTED') return 'rejected';
+            return 'pending';
+        }
+
+        // 翻译阶段
+        function translateStage(stage) {
+            const map = {
+                'INITIAL': '初始',
+                'SUBMITTED': '已提交',
+                'APPROVAL': '审批中',
+                'RISK': '风控审核',
+                'CONTRACT': '合同签署',
+                'LOAN': '放款',
+                'REPAYING': '还款中',
+                'COMPLETED': '已完成'
+            };
+            return map[stage] || stage;
+        }
+
+        // 显示审批详情
+        function showApprovalDetail(applicationId) {
+            const app = applicationsData.find(a => a.id === applicationId);
+            if (!app) return;
+
+            document.getElementById('approvalApplicationId').value = applicationId;
+            document.getElementById('displayApplicationNo').textContent = app.applicationNo || '-';
+            document.getElementById('displayCustomerName').textContent = app.customerName || '-';
+            document.getElementById('displayLoanAmount').textContent = app.loanAmount ? app.loanAmount + '万元' : '-';
+            document.getElementById('displayCurrentStage').textContent = translateStage(app.currentStage);
+            document.getElementById('approvalAction').value = '';
+            document.getElementById('approvalComment').value = '';
+
+            // 加载审批记录
+            loadApprovalRecords(applicationId);
+
+            document.getElementById('approvalModal').style.display = 'flex';
+        }
+
+        // 加载审批记录
+        function loadApprovalRecords(applicationId) {
+            fetch(`/api/applications/${applicationId}/records`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 200 && data.data && data.data.length > 0) {
+                        renderRecords(data.data);
+                    } else {
+                        document.getElementById('recordTimeline').innerHTML = '<p style="color:#999;text-align:center;">暂无审批记录</p>';
+                    }
+                })
+                .catch(err => {
+                    console.error('加载审批记录失败:', err);
+                    document.getElementById('recordTimeline').innerHTML = '<p style="color:#ff4d4f;">加载失败</p>';
+                });
+        }
+
+        // 渲染审批记录
+        function renderRecords(records) {
+            const timeline = document.getElementById('recordTimeline');
+            timeline.innerHTML = records.map(record => `
+                <div class="record-item ${record.action}">
+                    <div class="record-header">
+                        <span class="record-stage">${translateStage(record.stage)}</span>
+                        <span class="record-time">${formatDate(record.createdAt)}</span>
+                    </div>
+                    <div class="record-content">
+                        <span class="action-badge action-${record.action}">${record.action === 'approve' ? '同意' : '拒绝'}</span>
+                        ${record.comment ? `<p style="margin:8px 0 0 0;font-size:13px;">${record.comment}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 关闭审批弹窗
+        function closeApprovalModal() {
+            document.getElementById('approvalModal').style.display = 'none';
+        }
+
+        // 提交审批
+        function submitApproval() {
+            const applicationId = document.getElementById('approvalApplicationId').value;
+            const action = document.getElementById('approvalAction').value;
+            const comment = document.getElementById('approvalComment').value;
+
+            if (!action) {
+                alert('请选择审批操作');
+                return;
+            }
+
+            fetch(`/api/applications/${applicationId}/approve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, comment })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 200) {
+                    alert('审批完成');
+                    closeApprovalModal();
+                    loadData();
+                } else {
+                    alert('审批失败：' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error('审批失败:', err);
+                alert('审批失败，请重试');
+            });
+        }
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // 退出登录
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => window.location.href = '/login');
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

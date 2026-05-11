@@ -58,6 +58,36 @@
         ORDER BY created_at DESC
     </select>
 
+    <select id="findByCreatedBy" resultMap="BaseResultMap">
+        SELECT * FROM loan_application
+        <where>
+            created_by = #{createdBy}
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="guaranteeType != null and guaranteeType != ''">
+                AND guarantee_type = #{guaranteeType}
+            </if>
+            <if test="minAmount != null and minAmount != ''">
+                AND loan_amount &gt;= #{minAmount}
+            </if>
+            <if test="maxAmount != null and maxAmount != ''">
+                AND loan_amount &lt;= #{maxAmount}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (customer_name LIKE CONCAT('%', #{keyword}, '%')
+                OR customer_phone LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND DATE(created_at) &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND DATE(created_at) &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
     <insert id="insert" parameterType="com.example.aitest.entity.LoanApplication" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO loan_application (
             application_no, customer_id, customer_name, customer_id_no, customer_phone,
@@ -101,5 +131,14 @@
         UPDATE loan_application SET current_stage = #{stage}, updated_at = NOW()
         WHERE id = #{id}
     </update>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM loan_application
+    </select>
+
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(*) FROM loan_application
+        WHERE status = #{status}
+    </select>
 
 </mapper>

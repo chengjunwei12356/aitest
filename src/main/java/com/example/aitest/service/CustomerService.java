@@ -44,6 +44,12 @@ public interface CustomerService {
     Customer update(Customer customer);
 
     /**
+     * 删除客户
+     * @param id 客户 ID
+     */
+    void delete(Long id);
+
+    /**
      * 获取所有客户
      * @return 客户列表
      */

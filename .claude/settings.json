@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Admin/AppData/Roaming/Code/User/**)",
+      "Bash(curl -s http://localhost:8080/api/users)",
+      "Bash(curl -s http://localhost:8080/api/roles)"
+    ]
+  }
+}

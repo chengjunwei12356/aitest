@@ -33,3 +33,9 @@ INSERT INTO `customer_reminder` (`user_id`, `customer_id`, `reminder_type`, `tit
 (1, 3, 'APPROVAL_TIMEOUT', '审批超时提醒', '客户王五的贷款申请（A202604020003）审批已超过3个工作日，请尽快处理。', 3, 'PENDING', DATE_ADD(NOW(), INTERVAL 1 DAY)),
 (1, 1, 'FOLLOWUP_REQUIRED', '客户回访提醒', '客户张三咨询贷款产品后24小时内未进行回访，请尽快联系客户。', 2, 'NOTIFIED', DATE_ADD(NOW(), INTERVAL 12 HOUR)),
 (1, 2, 'LOAN_RENEW', '续贷提醒', '客户李四的贷款（合同号：JK202501010001）将于30天后到期，建议推荐续贷产品。', 2, 'PENDING', DATE_ADD(NOW(), INTERVAL 30 DAY));
+
+-- 站内消息测试数据（模拟已生成的消息）
+INSERT INTO `notification` (`user_id`, `title`, `content`, `type`, `related_id`, `is_read`, `priority`) VALUES
+(1, '新贷款申请待初审', '申请编号: A202604020001, 客户: 张三, 金额: 50000.00元', 'REMINDER', 1, 0, 3),
+(1, '审批超时提醒', '申请编号: A202604020002 审批已超过3个工作日', 'APPROVAL', 2, 0, 3),
+(1, '申请已被拒绝', '申请编号: A202604020003 已被拒绝，请及时联系客户', 'APPROVAL', 3, 1, 2);

@@ -39,6 +39,21 @@ public class User {
     private Integer status;
 
     /**
+     * 连续登录失败次数
+     */
+    private Integer failedLoginAttempts;
+
+    /**
+     * 账户锁定截止时间
+     */
+    private LocalDateTime lockedUntil;
+
+    /**
+     * 最后登录时间
+     */
+    private LocalDateTime lastLoginAt;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createdAt;

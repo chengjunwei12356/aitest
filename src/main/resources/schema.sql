@@ -194,3 +194,22 @@ CREATE TABLE IF NOT EXISTS `knowledge_article` (
     INDEX `idx_category` (`category`),
     INDEX `idx_is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识库文章表';
+
+-- ===========================
+-- 站内消息表
+-- ===========================
+CREATE TABLE IF NOT EXISTS `notification` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `user_id` BIGINT NOT NULL COMMENT '接收用户 ID',
+    `title` VARCHAR(200) NOT NULL COMMENT '消息标题',
+    `content` TEXT COMMENT '消息内容',
+    `type` VARCHAR(50) NOT NULL COMMENT '消息类型: REMINDER-提醒, APPROVAL-审批, SYSTEM-系统',
+    `related_id` BIGINT DEFAULT NULL COMMENT '关联业务 ID (如 reminder_id, application_id)',
+    `is_read` TINYINT DEFAULT 0 COMMENT '是否已读: 0-未读, 1-已读',
+    `priority` TINYINT DEFAULT 1 COMMENT '优先级: 1-低, 2-中, 3-高',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `read_at` DATETIME DEFAULT NULL COMMENT '阅读时间',
+    INDEX `idx_user_id` (`user_id`),
+    INDEX `idx_is_read` (`is_read`),
+    INDEX `idx_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='站内消息表';

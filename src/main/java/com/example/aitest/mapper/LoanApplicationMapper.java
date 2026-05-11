@@ -34,6 +34,18 @@ public interface LoanApplicationMapper {
                                    @Param("endDate") String endDate);
 
     /**
+     * 根据创建人查询申请列表（数据隔离）
+     */
+    List<LoanApplication> findByCreatedBy(@Param("createdBy") Long createdBy,
+                                          @Param("status") String status,
+                                          @Param("guaranteeType") String guaranteeType,
+                                          @Param("minAmount") String minAmount,
+                                          @Param("maxAmount") String maxAmount,
+                                          @Param("keyword") String keyword,
+                                          @Param("startDate") String startDate,
+                                          @Param("endDate") String endDate);
+
+    /**
      * 插入申请
      */
     int insert(LoanApplication application);
@@ -57,4 +69,14 @@ public interface LoanApplicationMapper {
      * 更新当前阶段
      */
     int updateCurrentStage(@Param("id") Long id, @Param("stage") String stage);
+
+    /**
+     * 统计所有申请数量
+     */
+    int countAll();
+
+    /**
+     * 按状态统计申请数量
+     */
+    int countByStatus(@Param("status") String status);
 }

@@ -24,6 +24,7 @@ public enum ResultCode {
     CAPTCHA_EXPIRED(1004, "验证码已过期"),
     USER_NOT_FOUND(1005, "用户不存在"),
     USERNAME_EXISTS(1006, "用户名已存在"),
+    ACCOUNT_LOCKED(1007, "账户已锁定，请稍后重试"),
 
     // 申请管理业务错误码
     APPLICATION_NOT_FOUND(3001, "申请不存在"),

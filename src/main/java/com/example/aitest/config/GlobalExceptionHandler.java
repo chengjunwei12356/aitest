@@ -52,6 +52,15 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 处理非法参数异常（如枚举转换失败）
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<Void> handleIllegalArgumentException(IllegalArgumentException e) {
+        return Result.error(400, "参数错误：" + e.getMessage());
+    }
+
+    /**
      * 处理其他异常
      */
     @ExceptionHandler(Exception.class)

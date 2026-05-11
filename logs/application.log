@@ -1,0 +1,355 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2026-05-11T15:32:45.232+08:00  INFO 12572 --- [aitest] [           main] com.example.aitest.AitestApplication     : Starting AitestApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 12572 (C:\Users\Admin\git\aitest\target\aitest-0.0.1-SNAPSHOT.jar started by Admin in C:\Users\Admin\git\aitest)
+2026-05-11T15:32:45.260+08:00  INFO 12572 --- [aitest] [           main] com.example.aitest.AitestApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-05-11T15:32:49.796+08:00  INFO 12572 --- [aitest] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-11T15:32:49.832+08:00  INFO 12572 --- [aitest] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-11T15:32:49.839+08:00  INFO 12572 --- [aitest] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-05-11T15:32:49.969+08:00  INFO 12572 --- [aitest] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-11T15:32:49.976+08:00  INFO 12572 --- [aitest] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4419 ms
+2026-05-11T15:32:50.479+08:00  INFO 12572 --- [aitest] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-11T15:32:51.142+08:00  INFO 12572 --- [aitest] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@91f565d
+2026-05-11T15:32:51.147+08:00  INFO 12572 --- [aitest] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-11T15:32:54.665+08:00  INFO 12572 --- [aitest] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2026-05-11T15:32:56.908+08:00  INFO 12572 --- [aitest] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-05-11T15:32:57.004+08:00  INFO 12572 --- [aitest] [           main] com.example.aitest.AitestApplication     : Started AitestApplication in 13.264 seconds (process running for 14.535)
+2026-05-11T15:32:57.029+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 开始执行数据库字符集修复...
+2026-05-11T15:32:57.037+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 loan_application 表数据...
+2026-05-11T15:32:57.054+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 customer 表数据...
+2026-05-11T15:32:57.071+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 role_menu 表数据...
+2026-05-11T15:32:57.087+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 user_role 表数据...
+2026-05-11T15:32:57.098+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 menu 表数据...
+2026-05-11T15:32:57.106+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 删除 role 表数据...
+2026-05-11T15:32:57.136+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入角色数据...
+2026-05-11T15:32:57.289+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入菜单数据...
+2026-05-11T15:32:57.423+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入客户数据...
+2026-05-11T15:32:57.449+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入贷款申请数据...
+2026-05-11T15:32:57.507+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入角色菜单关联数据...
+2026-05-11T15:32:57.597+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 插入用户角色关联数据...
+2026-05-11T15:32:57.604+08:00  INFO 12572 --- [aitest] [           main] c.e.aitest.config.DatabaseFixRunner      : 数据库修复完成！
+2026-05-11T15:33:16.676+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-11T15:33:16.676+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-11T15:33:16.678+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-11T15:33:17.093+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:33:46.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:34:16.090+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:34:46.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:35:16.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:35:46.109+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:36:47.091+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:37:48.095+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:38:49.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:39:50.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:40:51.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:41:05.757+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:41:11.722+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:41:15.287+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取用户消息列表，userId: null, isRead: false
+2026-05-11T15:41:17.510+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 全部标记为已读，userId: null
+2026-05-11T15:41:17.523+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 批量标记已读完成，userId: null, 影响行数: 0
+2026-05-11T15:41:17.543+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:41:41.656+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:44:36.343+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:44:42.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:45:12.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:45:42.102+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:46:12.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:46:42.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:47:43.096+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:48:44.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:49:12.095+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:49:41.657+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:50:12.109+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:50:42.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:51:12.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:51:34.215+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x020x000x010x000x010xfc0x030x030x8c0x8f0xbc0x9f{0x870xa40x9b#0xbfj0x8cBt0xcb0x920xa70xaf'0xaa0xeeE0xf2X30xdf0x0e^c0x8c[V ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.20.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
+
+2026-05-11T15:51:42.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:51:51.681+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请列表，status: null, guaranteeType: null, minAmount: null, maxAmount: null, keyword: null
+2026-05-11T15:52:10.178+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.ApplicationServiceImpl      : 创建贷款申请，customerName: TestUser, loanAmount: 50000, currentUserId: 1
+2026-05-11T15:52:18.493+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请列表，status: null, guaranteeType: null, minAmount: null, maxAmount: null, keyword: null
+2026-05-11T15:52:18.980+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请，id: 9999999
+2026-05-11T15:52:19.281+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.ApplicationServiceImpl      : 删除贷款申请，id: 9999999
+2026-05-11T15:52:19.529+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请列表，status: null, guaranteeType: null, minAmount: null, maxAmount: null, keyword: null
+2026-05-11T15:52:28.179+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请，id: 132
+2026-05-11T15:52:28.256+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.ApplicationServiceImpl      : 查询贷款申请列表，status: null, guaranteeType: null, minAmount: null, maxAmount: null, keyword: null
+2026-05-11T15:52:43.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:52:48.082+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.ApplicationServiceImpl      : 审批贷款申请，id: 132, action: null, currentUserId: 1
+2026-05-11T15:52:48.173+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.service.impl.ApprovalServiceImpl   : 查询审批记录列表，applicationId: 132
+2026-05-11T15:52:55.937+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.ApplicationServiceImpl      : 审批贷款申请，id: 132, action: APPROVE, currentUserId: 1
+2026-05-11T15:52:55.957+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.ApplicationServiceImpl      : 审批记录已创建，applicationId: 132, stage: INITIAL
+2026-05-11T15:52:56.066+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.ApplicationServiceImpl      : 审批贷款申请，id: 132, action: REJECT, currentUserId: 1
+2026-05-11T15:52:56.078+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.ApplicationServiceImpl      : 审批记录已创建，applicationId: 132, stage: INITIAL
+2026-05-11T15:52:56.196+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.ApplicationServiceImpl      : 审批贷款申请，id: 9999, action: APPROVE, currentUserId: 1
+2026-05-11T15:53:44.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:54:45.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:55:15.808+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:55:42.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:56:12.113+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:56:56.315+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:57:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:58:45.465+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:58:45.711+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取用户消息列表，userId: null, isRead: false
+2026-05-11T15:58:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T15:59:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:00:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:01:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:02:56.095+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:03:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:04:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:05:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:06:56.123+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:07:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:08:56.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:09:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:10:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:11:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:12:56.112+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:13:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:14:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:15:56.111+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:16:56.121+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:17:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:18:56.109+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:19:56.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:20:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:21:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:22:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:23:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:24:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:25:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:26:56.097+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:27:56.125+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:28:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:29:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:30:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:31:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:32:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:33:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:34:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:35:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:36:56.105+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:37:56.167+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:38:56.145+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:39:56.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:40:56.116+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:41:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:42:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:43:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:44:56.133+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:45:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:46:56.104+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:47:56.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:48:56.124+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:49:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:50:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:51:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:52:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:53:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:54:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:55:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:56:56.093+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:57:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:58:56.134+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T16:59:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:00:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:01:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:02:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:03:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:04:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:05:56.114+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:06:56.100+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:07:56.111+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:08:56.113+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:09:56.131+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:10:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:11:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:12:56.115+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:13:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:14:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:15:56.141+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:16:56.102+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:17:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:18:56.120+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:19:56.141+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:20:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:21:56.119+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:22:56.130+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:23:56.153+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:24:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:25:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:26:56.101+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:27:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:28:56.093+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:29:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:30:56.151+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:31:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:32:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:33:56.120+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:34:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:35:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:36:56.098+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:37:56.114+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:38:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:39:56.121+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:40:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:41:56.123+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:42:56.113+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:43:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:44:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:45:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:46:56.099+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:47:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:48:56.113+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:49:56.106+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:50:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:51:56.127+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:52:56.119+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:53:56.096+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:54:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:55:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:56:56.110+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:57:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:58:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T17:59:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:00:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:01:56.095+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:02:56.121+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:03:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:04:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:05:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:06:56.111+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:07:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:08:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:09:56.111+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:10:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:11:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:12:56.127+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:13:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:14:56.093+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:15:56.112+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:16:56.106+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:17:56.119+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:18:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:19:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:20:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:21:56.111+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:22:56.128+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:23:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:24:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:25:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:26:56.098+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:27:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:28:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:29:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:30:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:31:56.104+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:32:56.145+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:33:56.115+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:34:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:35:56.141+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:36:56.098+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:37:56.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:38:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:39:56.110+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:40:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:41:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:42:56.120+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:43:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:44:56.115+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:45:56.119+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:46:56.111+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:47:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:48:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:49:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:50:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:51:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:52:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:53:56.125+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:54:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:55:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:56:56.106+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:57:56.112+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:58:56.117+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T18:59:56.116+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:00:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:01:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:02:56.123+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:03:56.133+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:04:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:05:56.116+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:06:56.105+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:07:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:08:56.108+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:09:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:10:56.115+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:11:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:12:56.114+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:13:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:14:56.112+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:15:56.101+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:16:56.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:17:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:18:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:19:56.100+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:20:56.115+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:22:01.769+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:22:56.197+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:23:56.093+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:24:56.120+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:25:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:26:11.728+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:26:42.461+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:27:12.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:27:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:28:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:29:56.091+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:30:56.107+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:31:56.097+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:32:56.105+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:33:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:34:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:35:59.112+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:36:56.110+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:38:09.717+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:38:56.098+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:39:56.103+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:40:56.101+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:41:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:42:56.090+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:43:56.095+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:44:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:45:56.110+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:46:56.091+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:47:56.091+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:48:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:49:56.104+08:00  INFO 12572 --- [aitest] [io-8080-exec-10] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:50:56.092+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:51:56.102+08:00  INFO 12572 --- [aitest] [nio-8080-exec-5] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:52:56.103+08:00  INFO 12572 --- [aitest] [nio-8080-exec-7] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:53:56.099+08:00  INFO 12572 --- [aitest] [nio-8080-exec-6] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:54:56.094+08:00  INFO 12572 --- [aitest] [nio-8080-exec-8] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:55:56.114+08:00  INFO 12572 --- [aitest] [nio-8080-exec-2] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:56:56.090+08:00  INFO 12572 --- [aitest] [nio-8080-exec-3] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:57:56.097+08:00  INFO 12572 --- [aitest] [nio-8080-exec-1] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:58:56.090+08:00  INFO 12572 --- [aitest] [nio-8080-exec-9] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null
+2026-05-11T19:59:56.928+08:00  INFO 12572 --- [aitest] [nio-8080-exec-4] c.e.a.s.impl.NotificationServiceImpl     : 获取未读消息数量，userId: null

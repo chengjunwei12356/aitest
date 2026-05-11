@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请管理 - 银行信贷管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .filter-bar input {
+            width: 150px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background: #1890ff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+        .btn-danger {
+            background: #ff4d4f;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #ff7875;
+        }
+        .btn-success {
+            background: #52c41a;
+            color: #fff;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            border: 1px solid #f0f0f0;
+            text-align: left;
+        }
+        .data-table th {
+            background: #fafafa;
+            font-weight: 600;
+        }
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .status-draft { background: #f0f0f0; color: #666; }
+        .status-pending { background: #e6f7ff; color: #1890ff; }
+        .status-approved { background: #f6ffed; color: #52c41a; }
+        .status-rejected { background: #fff2f0; color: #ff4d4f; }
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .pagination button {
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .pagination button:hover:not(:disabled) {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .pagination button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 8px;
+            width: 600px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-footer {
+            padding: 12px 24px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .form-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .form-item label {
+            width: 100px;
+            text-align: right;
+            line-height: 32px;
+        }
+        .form-item input, .form-item select {
+            flex: 1;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo">银行信贷管理系统</div>
+        <div class="user-info">
+            <span id="username">管理员</span>
+            <button class="logout-btn" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <div class="left-menu">
+            <a href="/index" class="menu-item">📊 工作台</a>
+            <a href="/application" class="menu-item active">📋 申请管理</a>
+            <a href="/approval" class="menu-item">✓ 审批管理</a>
+            <a href="/contract" class="menu-item">📄 合同管理</a>
+            <a href="/loan" class="menu-item">💰 放款管理</a>
+            <a href="/repayment" class="menu-item">🔄 还款管理</a>
+            <a href="/warning" class="menu-item">⚠️ 预警管理</a>
+            <a href="/postloan" class="menu-item">📈 贷后管理</a>
+            <a href="/user" class="menu-item">👥 用户管理</a>
+            <a href="/role" class="menu-item">👨‍💼 角色管理</a>
+            <a href="/workflow" class="menu-item">⚙️ 流程管理</a>
+            <a href="/report" class="menu-item">📊 报表管理</a>
+            <a href="/customer-assistant" class="menu-item">🤖 客户经理助手</a>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <div class="card-title">申请管理</div>
+
+                <!-- 筛选栏 -->
+                <div class="filter-bar">
+                    <input type="text" id="keyword" placeholder="客户姓名/手机号">
+                    <select id="status">
+                        <option value="">全部状态</option>
+                        <option value="draft">草稿</option>
+                        <option value="pending">待审批</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已拒绝</option>
+                    </select>
+                    <input type="text" id="startDate" placeholder="开始日期" onfocus="(this.type='date')">
+                    <input type="text" id="endDate" placeholder="结束日期" onfocus="(this.type='date')">
+                    <button class="btn btn-primary" onclick="loadData()">查询</button>
+                    <button class="btn btn-primary" onclick="showCreateModal()">+ 新建申请</button>
+                </div>
+
+                <!-- 数据表格 -->
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>客户姓名</th>
+                            <th>证件类型号</th>
+                            <th>手机号</th>
+                            <th>贷款金额</th>
+                            <th>贷款期限</th>
+                            <th>贷款用途</th>
+                            <th>担保方式</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="10" style="text-align:center;">加载中...</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- 分页 -->
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建/编辑申请弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">新建申请</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="applicationForm">
+                    <input type="hidden" id="applicationId">
+                    <div class="form-item">
+                        <label>客户姓名 *</label>
+                        <input type="text" id="customerName" required>
+                    </div>
+                    <div class="form-item">
+                        <label>证件号码 *</label>
+                        <input type="text" id="customerIdNo" required>
+                    </div>
+                    <div class="form-item">
+                        <label>手机号 *</label>
+                        <input type="text" id="customerPhone" required>
+                    </div>
+                    <div class="form-item">
+                        <label>贷款金额 (万元) *</label>
+                        <input type="number" id="loanAmount" step="0.01" required>
+                    </div>
+                    <div class="form-item">
+                        <label>贷款期限 (月) *</label>
+                        <input type="number" id="loanTerm" required>
+                    </div>
+                    <div class="form-item">
+                        <label>贷款用途 *</label>
+                        <select id="loanPurpose" required>
+                            <option value="">请选择</option>
+                            <option value="消费">消费</option>
+                            <option value="经营">经营</option>
+                            <option value="购房">购房</option>
+                            <option value="装修">装修</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>担保方式 *</label>
+                        <select id="guaranteeType" required>
+                            <option value="">请选择</option>
+                            <option value="CREDIT">信用</option>
+                            <option value="GUARANTEE">保证</option>
+                            <option value="MORTGAGE">抵押</option>
+                            <option value="PLEDGE">质押</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveApplication()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
+    <script>
+        let currentPage = 1;
+        const pageSize = 10;
+
+        // 加载数据
+        async function loadData() {
+            const keyword = document.getElementById('keyword').value;
+            const status = document.getElementById('status').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            let url = `/api/applications?keyword=${encodeURIComponent(keyword)}&status=${status}`;
+            if (startDate) url += `&startDate=${startDate}`;
+            if (endDate) url += `&endDate=${endDate}`;
+
+            try {
+                showPageLoading('加载数据中...');
+                const data = await apiGet(url);
+                renderTable(data);
+            } catch (err) {
+                console.error('加载数据失败:', err);
+            } finally {
+                hidePageLoading();
+            }
+        }
+
+        // 渲染表格
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">暂无数据</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.customerName || '-'}</td>
+                    <td>${item.customerIdNo || '-'}</td>
+                    <td>${item.customerPhone || '-'}</td>
+                    <td>${item.loanAmount ? (item.loanAmount / 10000).toFixed(2) + ' 万元' : '-'}</td>
+                    <td>${item.loanTerm || '-'}月</td>
+                    <td>${item.loanPurpose || '-'}</td>
+                    <td>${translateGuaranteeType(item.guaranteeType)}</td>
+                    <td><span class="status-badge status-${item.status}">${translateStatus(item.status)}</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editApplication(${item.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteApplication(${item.id})">删除</button>
+                        ${item.status === 'INITIAL' || item.status === 'draft' ? `<button class="btn btn-success" onclick="submitApplication(${item.id})">提交</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 翻译状态
+        function translateStatus(status) {
+            const map = {
+                'INITIAL': '草稿',
+                'draft': '草稿',
+                'PENDING': '待审批',
+                'pending': '待审批',
+                'APPROVED': '已通过',
+                'approved': '已通过',
+                'REJECTED': '已拒绝',
+                'rejected': '已拒绝',
+                'RISK': '风险评估',
+                'risk': '风险评估'
+            };
+            return map[status] || status;
+        }
+
+        // 翻译担保方式
+        function translateGuaranteeType(type) {
+            const map = {
+                'CREDIT': '信用',
+                'credit': '信用',
+                'GUARANTEE': '保证',
+                'guarantee': '保证',
+                'MORTGAGE': '抵押',
+                'mortgage': '抵押',
+                'PLEDGE': '质押',
+                'pledge': '质押'
+            };
+            return map[type] || type;
+        }
+
+        // 显示新建弹窗
+        function showCreateModal() {
+            document.getElementById('modalTitle').textContent = '新建申请';
+            document.getElementById('applicationForm').reset();
+            document.getElementById('applicationId').value = '';
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        // 编辑申请
+        function editApplication(id) {
+            fetch(`/api/applications/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const item = data.data;
+                        document.getElementById('modalTitle').textContent = '编辑申请';
+                        document.getElementById('applicationId').value = item.id;
+                        document.getElementById('customerName').value = item.customerName || '';
+                        document.getElementById('customerIdNo').value = item.customerIdNo || '';
+                        document.getElementById('customerPhone').value = item.customerPhone || '';
+                        document.getElementById('loanAmount').value = item.loanAmount ? (item.loanAmount / 10000).toFixed(2) : ''; // 元转换为万元
+                        document.getElementById('loanTerm').value = item.loanTerm || '';
+                        document.getElementById('loanPurpose').value = item.loanPurpose || '';
+                        document.getElementById('guaranteeType').value = item.guaranteeType || '';
+                        document.getElementById('modalOverlay').style.display = 'flex';
+                    }
+                });
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // 保存申请
+        async function saveApplication() {
+            const button = event.target;
+            const id = document.getElementById('applicationId').value;
+            const payload = {
+                customerName: document.getElementById('customerName').value,
+                customerIdNo: document.getElementById('customerIdNo').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                loanAmount: parseFloat(document.getElementById('loanAmount').value) * 10000,
+                loanTerm: parseInt(document.getElementById('loanTerm').value),
+                loanPurpose: document.getElementById('loanPurpose').value,
+                guaranteeType: document.getElementById('guaranteeType').value
+            };
+
+            try {
+                showButtonLoading(button, '保存中...');
+                const url = id ? `/api/applications/${id}` : '/api/applications';
+                
+                if (id) {
+                    await apiPut(url, payload);
+                } else {
+                    await apiPost(url, payload);
+                }
+                
+                showToast('保存成功', 'success');
+                closeModal();
+                loadData();
+            } catch (err) {
+                console.error('保存失败:', err);
+            } finally {
+                hideButtonLoading(button);
+            }
+        }
+
+        // 删除申请
+        function deleteApplication(id) {
+            showConfirm('确定要删除这条申请吗？此操作不可恢复。', async () => {
+                try {
+                    await apiDelete(`/api/applications/${id}`);
+                    showToast('删除成功', 'success');
+                    loadData();
+                } catch (err) {
+                    console.error('删除失败:', err);
+                }
+            });
+        }
+
+        // 提交申请
+        function submitApplication(id) {
+            showConfirm('确定要提交这条申请吗？', async () => {
+                try {
+                    await apiPost(`/api/applications/${id}/submit`);
+                    showToast('提交成功', 'success');
+                    loadData();
+                } catch (err) {
+                    console.error('提交失败:', err);
+                }
+            });
+        }
+
+        // 退出登录
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => window.location.href = '/login');
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

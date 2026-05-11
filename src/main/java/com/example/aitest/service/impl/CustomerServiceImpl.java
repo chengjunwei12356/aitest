@@ -82,6 +82,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
+    public void delete(Long id) {
+        log.info("删除客户，id: {}", id);
+
+        Customer existing = customerMapper.findById(id);
+        if (existing == null) {
+            throw new BusinessException(ResultCode.CUSTOMER_NOT_FOUND);
+        }
+
+        // TODO: 检查是否有关联的贷款申请
+        // int applicationCount = loanApplicationMapper.countByCustomerId(id);
+        // if (applicationCount > 0) {
+        //     throw new BusinessException("该客户有" + applicationCount + "笔贷款申请，无法删除");
+        // }
+
+        customerMapper.deleteById(id);
+        log.info("客户删除成功，id: {}", id);
+    }
+
+    @Override
     public List<Customer> findAll() {
         log.info("查询所有客户列表");
         return customerMapper.search("");

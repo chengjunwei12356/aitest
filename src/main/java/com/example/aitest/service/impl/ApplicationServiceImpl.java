@@ -2,15 +2,15 @@ package com.example.aitest.service.impl;
 
 import com.example.aitest.common.ResultCode;
 import com.example.aitest.config.BusinessException;
-import com.example.aitest.entity.ApplicationStatus;
-import com.example.aitest.entity.Customer;
-import com.example.aitest.entity.GuaranteeType;
-import com.example.aitest.entity.LoanApplication;
-import com.example.aitest.mapper.CustomerMapper;
-import com.example.aitest.mapper.LoanApplicationMapper;
+import com.example.aitest.entity.*;
+import com.example.aitest.event.ApplicationStatusChangedEvent;
+import com.example.aitest.mapper.*;
 import com.example.aitest.service.ApplicationService;
+import com.example.aitest.service.CustomerAssistantService;
+import com.example.aitest.util.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private final LoanApplicationMapper loanApplicationMapper;
     private final CustomerMapper customerMapper;
+    private final ApprovalRecordMapper approvalRecordMapper;
+    private final CustomerAssistantService customerAssistantService;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 风控审批阈值：10 万
     private static final BigDecimal RISK_APPROVAL_THRESHOLD = new BigDecimal("100000");
@@ -41,6 +44,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (application == null) {
             throw new BusinessException(ResultCode.APPLICATION_NOT_FOUND);
         }
+        
+        // 数据隔离：普通用户只能查看自己创建的申请
+        Long currentUserId = CurrentUserUtils.getUserId();
+        if (currentUserId != null && !isAdmin(currentUserId)) {
+            if (!application.getCreatedBy().equals(currentUserId)) {
+                throw new BusinessException(ResultCode.APPLICATION_NO_PERMISSION);
+            }
+        }
+        
         return application;
     }
 
@@ -56,12 +68,35 @@ public class ApplicationServiceImpl implements ApplicationService {
                                          String keyword, LocalDateTime startDate, LocalDateTime endDate) {
         log.info("查询贷款申请列表，status: {}, guaranteeType: {}, minAmount: {}, maxAmount: {}, keyword: {}",
                 status, guaranteeType, minAmount, maxAmount, keyword);
+        
+        Long currentUserId = CurrentUserUtils.getUserId();
+        
+        // 数据隔离：普通用户只能查看自己创建的申请，管理员可以查看所有
+        if (currentUserId != null && !isAdmin(currentUserId)) {
+            log.info("非管理员用户，只查询 createdBy={} 的申请", currentUserId);
+            return loanApplicationMapper.findByCreatedBy(currentUserId, status, guaranteeType,
+                    minAmount != null ? minAmount.toString() : null,
+                    maxAmount != null ? maxAmount.toString() : null,
+                    keyword,
+                    startDate != null ? startDate.toString() : null,
+                    endDate != null ? endDate.toString() : null);
+        }
+        
+        // 管理员查询所有
         return loanApplicationMapper.findAll(status, guaranteeType,
                 minAmount != null ? minAmount.toString() : null,
                 maxAmount != null ? maxAmount.toString() : null,
                 keyword,
                 startDate != null ? startDate.toString() : null,
                 endDate != null ? endDate.toString() : null);
+    }
+    
+    /**
+     * 检查是否为管理员（简单实现，实际应查询角色表）
+     */
+    private boolean isAdmin(Long userId) {
+        // 假设 userId=1 为管理员，实际项目中应查询 user_role 和 role 表
+        return userId != null && userId == 1L;
     }
 
     @Override
@@ -196,6 +231,9 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new BusinessException(ResultCode.APPLICATION_NO_PERMISSION);
         }
 
+        // 保存旧状态用于事件发布
+        ApplicationStatus oldStatus = application.getStatus();
+
         // 根据金额判断审批流程
         if (application.getLoanAmount().compareTo(RISK_APPROVAL_THRESHOLD) >= 0) {
             // 金额 >= 10 万，需要风控审批
@@ -210,6 +248,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         loanApplicationMapper.update(application);
+
+        // 发布状态变更事件，触发自动提醒生成
+        eventPublisher.publishEvent(new ApplicationStatusChangedEvent(
+                this, application, oldStatus, application.getStatus(),
+                application.getCurrentStage(), currentUserId));
     }
 
     @Override
@@ -222,8 +265,19 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new BusinessException(ResultCode.APPLICATION_NOT_FOUND);
         }
 
-        ApplicationStatus status = application.getStatus();
+        ApplicationStatus oldStatus = application.getStatus();
         String currentStage = application.getCurrentStage();
+
+        // 创建审批记录
+        ApprovalRecord record = new ApprovalRecord();
+        record.setApplicationId(id);
+        record.setStage(currentStage);
+        record.setApproverId(currentUserId);
+        record.setAction(action);
+        record.setComment(comment);
+        record.setCreatedAt(LocalDateTime.now());
+        approvalRecordMapper.insert(record);
+        log.info("审批记录已创建，applicationId: {}, stage: {}", id, currentStage);
 
         if ("REJECT".equalsIgnoreCase(action)) {
             // 拒绝申请
@@ -231,37 +285,48 @@ public class ApplicationServiceImpl implements ApplicationService {
             application.setCurrentStage("REJECTED");
             loanApplicationMapper.update(application);
             log.info("申请已拒绝，id: {}", id);
+
+            // 发布事件
+            eventPublisher.publishEvent(new ApplicationStatusChangedEvent(
+                    this, application, oldStatus, ApplicationStatus.REJECTED,
+                    "REJECTED", currentUserId));
             return;
         }
 
         // 审批通过，根据当前阶段流转状态
         if ("INITIAL".equals(currentStage)) {
             // 初审通过
-            if (application.getLoanAmount().compareTo(RISK_APPROVAL_THRESHOLD) >= 0) {
-                // 金额 >= 10 万，进入终审
-                application.setStatus(ApplicationStatus.FINAL);
-                application.setCurrentStage("FINAL");
-            } else {
-                // 金额 < 10 万，进入终审
-                application.setStatus(ApplicationStatus.FINAL);
-                application.setCurrentStage("FINAL");
-            }
+            application.setStatus(ApplicationStatus.FINAL);
+            application.setCurrentStage("FINAL");
             loanApplicationMapper.update(application);
             log.info("初审通过，进入终审，id: {}", id);
 
+            // 发布事件
+            eventPublisher.publishEvent(new ApplicationStatusChangedEvent(
+                    this, application, oldStatus, ApplicationStatus.FINAL,
+                    "FINAL", currentUserId));
+
         } else if ("FINAL".equals(currentStage)) {
             // 终审通过
+            ApplicationStatus nextStatus;
             if (application.getLoanAmount().compareTo(RISK_APPROVAL_THRESHOLD) >= 0) {
                 // 金额 >= 10 万，进入风控审批
+                nextStatus = ApplicationStatus.RISK;
                 application.setStatus(ApplicationStatus.RISK);
                 application.setCurrentStage("RISK");
             } else {
                 // 金额 < 10 万，审批通过
+                nextStatus = ApplicationStatus.APPROVED;
                 application.setStatus(ApplicationStatus.APPROVED);
                 application.setCurrentStage("APPROVED");
             }
             loanApplicationMapper.update(application);
             log.info("终审通过，id: {}", id);
+
+            // 发布事件
+            eventPublisher.publishEvent(new ApplicationStatusChangedEvent(
+                    this, application, oldStatus, nextStatus,
+                    application.getCurrentStage(), currentUserId));
 
         } else if ("RISK".equals(currentStage)) {
             // 风控审批通过
@@ -269,6 +334,11 @@ public class ApplicationServiceImpl implements ApplicationService {
             application.setCurrentStage("APPROVED");
             loanApplicationMapper.update(application);
             log.info("风控审批通过，申请已批准，id: {}", id);
+
+            // 发布事件
+            eventPublisher.publishEvent(new ApplicationStatusChangedEvent(
+                    this, application, oldStatus, ApplicationStatus.APPROVED,
+                    "APPROVED", currentUserId));
         }
     }
 
@@ -285,6 +355,19 @@ public class ApplicationServiceImpl implements ApplicationService {
         application.setAssignedTo(assigneeId);
         application.setUpdatedAt(LocalDateTime.now());
         loanApplicationMapper.update(application);
+
+        // 生成分配提醒给新处理人
+        CustomerReminder reminder = new CustomerReminder();
+        reminder.setUserId(assigneeId);
+        reminder.setCustomerId(application.getCustomerId());
+        reminder.setReminderType(ReminderType.FOLLOWUP_REQUIRED);
+        reminder.setTitle("新的贷款申请已分配给您");
+        reminder.setContent(String.format("申请编号: %s, 客户: %s",
+                application.getApplicationNo(), application.getCustomerName()));
+        reminder.setPriority(2);
+        reminder.setStatus("PENDING");
+        reminder.setDueDate(LocalDateTime.now().plusDays(1));
+        customerAssistantService.createReminder(reminder);
 
         log.info("申请分配成功，id: {}, assigneeId: {}", id, assigneeId);
     }
